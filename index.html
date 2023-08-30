@@ -1,0 +1,32 @@
+<head>
+    <b>Nonogram Solver Project</b>
+</head>
+<body>
+    <div>
+        <form>
+            <label for="agent">Agent</label>
+            <select id="agent">
+                <option value="backtracking">Backtracking</option>
+            </select>
+        </form>
+        <form>
+            <label for="samplePuzzle">Puzzle</label>
+            <select id="samplePuzzle">
+                <option value="puzzle1">Puzzle 1</option>
+                <option value="puzzle2">Puzzle 2</option>
+            </select>
+        </form>
+        <button onclick=initialize()>Select</button>
+    </div>
+    <div style="position: relative; top: 20px;" id="puzzle">
+        <!-- <canvas id="puzzle" width="50px" height="50px" 
+            style="border: 1px solid #000000; position: relative;">
+        </canvas> -->
+    </div>
+    <script src="utils/utils.js"></script>
+    <script src="utils/puzzleUtils.js"></script>
+    <script src="sample_puzzles/puzzles.js"></script>
+    <script src="agents/CSPAgent.js"></script>
+    <script src="agents/backtrackingAgent.js"></script>
+    <script src="index.js"></script>
+</body>
