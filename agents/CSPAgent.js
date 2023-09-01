@@ -19,6 +19,21 @@ class Agent{
                 variable.domain[-1] = this.getDomainNode();
                 variable.constraints.push(() => this.checkConflict(puzzle.row[i].row, puzzle.row[i].get()));
                 variable.constraints.push(() => this.checkConflict(puzzle.column[j].column, puzzle.column[j].get()));
+                variable.constraints.push(() => {
+                    let convertBoard = getPuzzleFromSolution(puzzle.board);
+                    console.log(convertBoard);
+                    for (let i = 0; i < puzzle.row.length; i++){
+                        if (this.reduceMax(convertBoard.row[i]) > this.reduceMax(puzzle.row[i].row)){
+                            return false;
+                        }
+                    }
+                    for (let i = 0; i < puzzle.column.length; i++){
+                        if (this.reduceMax(convertBoard.column[i]) > this.reduceMax(puzzle.column[i].column)){
+                            return false;
+                        }
+                    }
+                    return true;
+                });
             }
         }
     }
@@ -41,6 +56,7 @@ class Agent{
         let x = parseInt(hash[0]);
         let y = parseInt(hash[2]);
         this.puzzle.board[x][y] = value;
+        updateHTMLBoard();
     }
     getIndexHash(index){
         let row = Math.floor(index / this.puzzle.column.length);
@@ -53,5 +69,9 @@ class Agent{
     }
     checkConstraints(hash){
         return this.variables[hash].constraints.every(x => x());
+    }
+    reduceMax(arr){
+        let lowMax = -1 * Math.max(this.puzzle.row.length, this.puzzle.column.length) - 1
+        return arr.reduce((acc, e) => Math.max(acc, e), lowMax);
     }
 }

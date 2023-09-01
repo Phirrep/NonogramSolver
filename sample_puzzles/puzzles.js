@@ -1,9 +1,9 @@
 //Puzzle structure: Constraint for each row, constraint for each column
-let puzzle1 = {row: [[1], [1, 1], [1]], column: [[1], [1, 1], [1]]};
+let puzzle1 = {row: [[1], [1, 1], []], column: [[1], [1], [1]]};
 let solution1 = [
     [-1, 1, -1],
     [1, -1, 1],
-    [-1, 1, -1]
+    [-1, -1, -1]
 ];
 console.log(verifyPuzzle(puzzle1, solution1)? "puzzle 1 is valid": "puzzle 1 is not valid");
 

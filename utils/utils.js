@@ -70,9 +70,6 @@ function puzzleInitialize(){
                 (j+1)*2*charLen + (constraintMaxLen-charLen*(2*currCol.length-1)));
         }
     }
-
-
-
     constraintMaxLen = 0;
     //Create boxes to display nonogram constraints for the rows
     rowCtx.font = "20px Arial";
@@ -109,10 +106,18 @@ function puzzleInitialize(){
     for (let i = 0; i < puzzle.row.length; i++){
         for (let j = 0; j < puzzle.column.length; j++){
             let hash = i+" "+j;
-            let cell = {x: i*cellSize, y: j*cellSize};
+            let cell = {x: j*cellSize, y: i*cellSize};
             cellHashmap[hash] = cell;
             puzzleCtx.fillStyle="white";
             puzzleCtx.fillRect(cell.x, cell.y, cellSize, cellSize);
         }
+    }
+}
+
+function wait(ms){
+    var start = new Date().getTime();
+    var end = start;
+    while(end < start + ms){
+        end = new Date().getTime();
     }
 }
