@@ -9,6 +9,10 @@ function initialize(){
             puzzle = puzzle2;
             solution = solution2;
             break;
+        case "puzzle3":
+            puzzle = puzzle3;
+            solution = solution3;
+            break;
     }
     puzzle = createPuzzle(puzzle);
     board = puzzle.board;
@@ -19,6 +23,9 @@ function initialize(){
             break;
         case "forwardchecking":
             agent = new ForwardcheckingAgent(puzzle);
+            break;
+        case "arcconsistency":
+            agent = new ArcconsistencyAgent(puzzle);
             break;
     }
     puzzleInitialize();

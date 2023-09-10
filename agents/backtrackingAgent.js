@@ -15,6 +15,7 @@ class BacktrackingAgent extends Agent{
             let hash = this.getIndexHash(i);
             let currValue = 1;
             let progress = () => {
+                console.log(hash);
                 //wait(10);
                 this.setVariable(hash, currValue);
                 this.setCount += 1;

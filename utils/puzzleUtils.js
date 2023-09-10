@@ -79,7 +79,8 @@ function getPuzzleFromSolution(solution){
                 currValue += 1;
             }
             else if (solution[j][i] !== 0){
-                console.log("invalid value in solution");
+                console.log("invalid value in solution at " + j + " " + i);
+                console.log(solution[j][i]);
             }
         }
         newColumn.push(currValue);

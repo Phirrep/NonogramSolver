@@ -112,4 +112,28 @@ class Agent{
         }
         return constraints;
     }
+    getHashRow(hash){
+        let spaceIndex = 0;
+        while (hash[spaceIndex] != " "){
+            spaceIndex += 1;
+        }
+        let currRow = 0;
+        for (let i = 0; i < spaceIndex; i++){
+            currRow *= 10;
+            currRow += parseInt(hash[i]);
+        }
+        return currRow;
+    }
+    getHashCol(hash){
+        let spaceIndex = 0;
+        while (hash[spaceIndex] != " "){
+            spaceIndex += 1;
+        }
+        let currCol = 0;
+        for (let i = spaceIndex+1; i < hash.length; i++){
+            currCol *= 10;
+            currCol += parseInt(hash[i]);
+        }
+        return currCol;
+    }
 }
