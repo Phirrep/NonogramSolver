@@ -15,6 +15,8 @@ class ArcconsistencyAgent extends Agent{
             let hash = this.getIndexHash(i);
             let currValue = 1;
             let progress = () => {
+                console.log(currValue);
+                console.log(hash);
                 this.variables[hash].dependents.forEach(x => {
                     let variable = this.variables[x];
                     variable.domain[1].restrict = variable.domain[1].restrict.filter(y => y !== hash);

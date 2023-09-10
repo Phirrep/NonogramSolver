@@ -36,6 +36,16 @@ class Agent{
                     }
                     return true;
                 });
+                variable.constraints.push(() => {
+                    let convertBoard = getPuzzleFromSolution(puzzle.board);
+                    if (convertBoard.row.some((x, i) => x.length > this.puzzle.row[i].row.length)){
+                        return false;
+                    }
+                    if (convertBoard.column.some((x, i) => x.length > this.puzzle.column[i].column.length)){
+                        return false;
+                    }
+                    return true;
+                });
             }
         }
         this.setCount = 0;
@@ -59,8 +69,8 @@ class Agent{
         return true;
     }
     setVariable(hash, value){
-        let x = parseInt(hash[0]);
-        let y = parseInt(hash[2]);
+        let x = this.getHashRow(hash);
+        let y = this.getHashCol(hash);
         this.puzzle.board[x][y] = value;
         updateHTMLBoard();
     }
@@ -82,10 +92,11 @@ class Agent{
         return arr.reduce((acc, e) => Math.max(acc, e), lowMax);
     }
     //Returns current constraints for row and column
+    //TODO: Redefine, flawed function
     getCurrConstraints(hash){
         let constraints = {row: 0, column: 0};
-        let rowIndex = parseInt(hash[0]);
-        let colIndex = parseInt(hash[2]);
+        let rowIndex = this.getHashRow(hash);
+        let colIndex = this.getHashCol(hash);
         let currBoard = getPuzzleFromSolution(this.puzzle.board);
         let puzzleRow = this.puzzle.row[rowIndex].row;
         for (let i = 0; i < puzzleRow.length; i++){
