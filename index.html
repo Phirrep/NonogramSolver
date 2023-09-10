@@ -7,6 +7,7 @@
             <label for="agent">Agent</label>
             <select id="agent">
                 <option value="backtracking">Backtracking</option>
+                <option value="forwardchecking">Forwardchecking</option>
             </select>
         </form>
         <form>
@@ -17,6 +18,8 @@
             </select>
         </form>
         <button onclick=initialize()>Select</button>
+        <label for="count"># Of Variable Changes</label>
+        <t id="count">0</t>
     </div>
     <div style="position: relative; top: 20px;" id="puzzle">
         <!-- <canvas id="puzzle" width="50px" height="50px" 
@@ -28,5 +31,6 @@
     <script src="sample_puzzles/puzzles.js"></script>
     <script src="agents/CSPAgent.js"></script>
     <script src="agents/backtrackingAgent.js"></script>
+    <script src="agents/forwardcheckingAgent.js"></script>
     <script src="index.js"></script>
 </body>

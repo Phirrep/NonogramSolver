@@ -58,7 +58,7 @@ function getPuzzleFromSolution(solution){
             else if (solution[i][j] == 1){
                 currValue += 1;
             }
-            else {
+            else if (solution[i][j] !== 0) {
                 console.log("invalid value in solution");
             }
         }
@@ -78,7 +78,7 @@ function getPuzzleFromSolution(solution){
             else if (solution[j][i] == 1){
                 currValue += 1;
             }
-            else {
+            else if (solution[j][i] !== 0){
                 console.log("invalid value in solution");
             }
         }

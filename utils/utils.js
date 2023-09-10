@@ -37,9 +37,9 @@ function updateHTMLBoard(){
                 puzzleCtx.fillStyle = "black";
                 puzzleCtx.fillText("X", cell.x+10, cell.y+cellSize-10);
             }
-
         }
     }
+    document.getElementById("count").innerHTML = agent.setCount;
 }
 
 function puzzleInitialize(){

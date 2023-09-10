@@ -17,6 +17,9 @@ function initialize(){
         case "backtracking":
             agent = new BacktrackingAgent(puzzle);
             break;
+        case "forwardchecking":
+            agent = new ForwardcheckingAgent(puzzle);
+            break;
     }
     puzzleInitialize();
     agent.findSolution();

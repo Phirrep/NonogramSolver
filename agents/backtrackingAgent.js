@@ -17,6 +17,7 @@ class BacktrackingAgent extends Agent{
             let progress = () => {
                 //wait(10);
                 this.setVariable(hash, currValue);
+                this.setCount += 1;
                 if (currValue == 0){
                     window.requestAnimationFrame(hashSignal[i].continue);
                     return false;
