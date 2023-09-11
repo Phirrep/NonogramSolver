@@ -15,8 +15,8 @@ class ArcconsistencyAgent extends Agent{
             let hash = this.getIndexHash(i);
             let currValue = 1;
             let progress = () => {
-                console.log(currValue);
                 console.log(hash);
+                console.log(this.variables[hash].domain);
                 this.variables[hash].dependents.forEach(x => {
                     let variable = this.variables[x];
                     variable.domain[1].restrict = variable.domain[1].restrict.filter(y => y !== hash);
@@ -24,6 +24,7 @@ class ArcconsistencyAgent extends Agent{
                 });
                 this.variables[hash].dependents = [];
                 if (!this.variables[hash].domain[currValue].valid()){
+                    //console.log("skipping value: " + currValue + " for " + hash);
                     currValue = Math.min(currValue * -1, 0);
                     window.requestAnimationFrame(progress);
                     return;
@@ -40,16 +41,33 @@ class ArcconsistencyAgent extends Agent{
                         let rowIndex = this.getHashRow(hash);
                         let colIndex = this.getHashCol(hash);
                         let constraints = this.getCurrConstraints(hash);
+                        //If row constraints are filled out, make sure remaining row is -1
+                        if (this.checkFilledRow(rowIndex)){
+                            /* console.log(hash);
+                            console.log("filled row"); */
+                            for (let i = colIndex+1; i < this.puzzle.column.length; i++){
+                                let dHash = rowIndex+" "+i;
+                                this.variables[dHash].domain[1].restrict.push(hash);
+                                this.variables[hash].dependents.push(dHash);
+                                if (!this.variables[dHash].domain[-1].valid()){
+                                    window.requestAnimationFrame(progress);
+                                    return;
+                                }
+                            }
+                        }
                         if (constraints.row != -1){
+                            if (constraints.row + colIndex > this.puzzle.column.length){
+                                window.requestAnimationFrame(progress);
+                                return;
+                            }
                             let currDependents = [];
                             for (let i = 0; i < constraints.row-1; i++){
                                 let dependentHash = rowIndex+" "+(colIndex+i+1);
+                                console.log("forcing 1 on " + dependentHash + " from " + hash);
                                 this.variables[hash].dependents.push(dependentHash);
+                                this.variables[dependentHash].domain[-1].restrict.push(hash);
                                 currDependents.push(dependentHash);
                             }
-                            currDependents.forEach(x => {
-                                this.variables[x].domain[-1].restrict.push(hash);
-                            });
                             //Check if any variables have empty domains (can't be 1 or -1) 
                             if (currDependents.some(x => this.checkInconsistent(x))){
                                 window.requestAnimationFrame(progress);
@@ -66,7 +84,22 @@ class ArcconsistencyAgent extends Agent{
                                 }
                             }
                         }
+                        if (this.checkFilledColumn(colIndex)){
+                            for (let i = rowIndex+1; i < this.puzzle.row.length; i++){
+                                let dHash = i+" "+colIndex;
+                                this.variables[dHash].domain[1].restrict.push(hash);
+                                this.variables[hash].dependents.push(dHash);
+                                if (!this.variables[dHash].domain[-1].valid()){
+                                    window.requestAnimationFrame(progress);
+                                    return;
+                                }
+                            }
+                        }
                         if (constraints.column != -1){
+                            if (constraints.column + rowIndex > this.puzzle.row.length){
+                                window.requestAnimationFrame(progress);
+                                return;
+                            }
                             let currDependents = [];
                             for (let i = 0; i < constraints.column-1; i++){
                                 let dependentHash = (rowIndex+i+1)+" "+colIndex;
@@ -110,5 +143,32 @@ class ArcconsistencyAgent extends Agent{
     checkInconsistent(hash){
         let variable = this.variables[hash];
         return !variable.domain[1].valid() && !variable.domain[-1].valid();
+    }
+    //Returns whether or not the current row's constraints have been filled
+    checkFilledRow(rowIndex){
+        let boardRow = getPuzzleFromSolution(this.puzzle.board).row[rowIndex];
+        let puzzleRow = this.puzzle.row[rowIndex].row;
+        if (boardRow.length != puzzleRow.length){
+            return false;
+        }
+        for (let i = 0; i < boardRow.length; i++){
+            if (boardRow[i] != puzzleRow[i]){
+                return false;
+            }
+        }
+        return true;
+    }
+    checkFilledColumn(colIndex){
+        let boardColumn = getPuzzleFromSolution(this.puzzle.board).column[colIndex];
+        let puzzleColumn = this.puzzle.column[colIndex].column;
+        if (boardColumn.length != puzzleColumn.length){
+            return false;
+        }
+        for (let i = 0; i < boardColumn.length; i++){
+            if (boardColumn[i] != puzzleColumn[i]){
+                return false;
+            }
+        }
+        return true;
     }
 }

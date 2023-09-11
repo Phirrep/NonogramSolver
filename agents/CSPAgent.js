@@ -37,11 +37,12 @@ class Agent{
                     return true;
                 });
                 variable.constraints.push(() => {
-                    let convertBoard = getPuzzleFromSolution(puzzle.board);
-                    if (convertBoard.row.some((x, i) => x.length > this.puzzle.row[i].row.length)){
+                    let convertBoard = getPuzzleFromSolution(this.puzzle.board);
+                    //console.log(convertBoard);
+                    if (convertBoard.row[i].length > this.puzzle.row[i].row.length){
                         return false;
                     }
-                    if (convertBoard.column.some((x, i) => x.length > this.puzzle.column[i].column.length)){
+                    if (convertBoard.column[j].length > this.puzzle.column[j].column.length){
                         return false;
                     }
                     return true;
@@ -94,12 +95,40 @@ class Agent{
     //Returns current constraints for row and column
     //TODO: Redefine, flawed function
     getCurrConstraints(hash){
-        let constraints = {row: 0, column: 0};
+        let constraints = {row: -1, column: -1};
         let rowIndex = this.getHashRow(hash);
         let colIndex = this.getHashCol(hash);
         let currBoard = getPuzzleFromSolution(this.puzzle.board);
+
         let puzzleRow = this.puzzle.row[rowIndex].row;
-        for (let i = 0; i < puzzleRow.length; i++){
+        let currIndex = currBoard.row[rowIndex].length-1;
+        if (currBoard.row[rowIndex][currIndex] == 1){
+            constraints.row = puzzleRow[currIndex];
+        }
+        else {
+            constraints.row = -1;
+        }
+
+        let puzzleCol = this.puzzle.column[colIndex].column;
+        currIndex = currBoard.column[colIndex].length-1;
+        if (currBoard.column[colIndex][currIndex] == 1){
+            constraints.column = puzzleCol[currIndex];
+        }
+        else {
+            constraints.column = -1;
+        }
+        return constraints;
+
+
+        /* let mismatchIndex = currBoard.row[rowIndex].length;
+        for (let i = 0; i < mismatchIndex && i < puzzleRow.length; i++){
+            if (currBoard.row[rowIndex][i] != puzzleRow[i]){
+                mismatchIndex = i;
+                break;
+            }
+        }
+
+        for (let i = mismatchIndex; i < puzzleRow.length; i++){
             if (currBoard.row[rowIndex][i] == 1){
                 constraints.row = puzzleRow[i];
                 break;
@@ -111,7 +140,15 @@ class Agent{
             }
         }
         let puzzleCol = this.puzzle.column[colIndex].column;
-        for (let i = 0; i < puzzleCol.length; i++){
+        mismatchIndex = currBoard.column[colIndex].length;
+        for (let i = 0; i < mismatchIndex && i < puzzleCol.length; i++){
+            if (currBoard.column[colIndex][i] != puzzleCol[i]){
+                mismatchIndex = i;
+                break;
+            }
+        }
+
+        for (let i = mismatchIndex; i < puzzleCol.length; i++){
             if (currBoard.column[colIndex][i] == 1){
                 constraints.column = puzzleCol[i];
                 break;
@@ -120,7 +157,7 @@ class Agent{
                 constraints.column = -1;
                 break;
             }
-        }
+        } */
         return constraints;
     }
     getHashRow(hash){
