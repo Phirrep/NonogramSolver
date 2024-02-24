@@ -1,6 +1,10 @@
 class ArcconsistencyAgent extends Agent{
     constructor(puzzle){
         super(puzzle);
+        this.projectedBoard = {};
+        for (let hash in this.variables){
+            this.projectedBoard[hash] = 0;    
+        }
     }
     findSolution(){
         let hashSignal = [{continue: () => 0}];
@@ -15,8 +19,8 @@ class ArcconsistencyAgent extends Agent{
             let hash = this.getIndexHash(i);
             let currValue = 1;
             let progress = () => {
-                console.log(hash);
-                console.log(this.variables[hash].domain);
+                /* console.log(hash);
+                console.log(this.variables[hash].domain); */
                 this.variables[hash].dependents.forEach(x => {
                     let variable = this.variables[x];
                     variable.domain[1].restrict = variable.domain[1].restrict.filter(y => y !== hash);
@@ -169,6 +173,30 @@ class ArcconsistencyAgent extends Agent{
                 return false;
             }
         }
+        return true;
+    }
+    setVariable(hash, value){
+        let x = this.getHashRow(hash);
+        let y = this.getHashCol(hash);
+        this.projectedBoard[hash] = value;
+        this.puzzle.board[x][y] = value;
+        updateHTMLBoard();
+    }
+    updateProjected(){
+        for (let hash in this.projectedBoard){
+            if (!(this.variables[hash].domain[-1]).valid()){
+                this.projectedBoard[hash] = 1;
+            }
+            else if (!(this.variables[hash].domain[1]).valid()){
+                this.projectedBoard[hash] = -1;
+            }
+            else {
+                this.projectedBoard[hash] = 0;
+            }
+        }
+    }
+    checkProjected(){
+        
         return true;
     }
 }
